@@ -7,8 +7,9 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
+use Illuminate\Contracts\Auth\MustVerifyEmail;
 
-class User extends Authenticatable
+class User extends Authenticatable implements MustVerifyEmail
 {
     use HasApiTokens, HasFactory, Notifiable;
 
@@ -20,8 +21,10 @@ class User extends Authenticatable
     protected $fillable = [
         'name',
         'email',
-        'username'
+        'username',
         'password',
+        'email_verified_at',
+        'verification_code'
     ];
 
     /**
@@ -49,22 +52,22 @@ class User extends Authenticatable
     }
 
     public function likes(){
-        return $this->hasMany(Like:class);
+        return $this->hasMany(Like::class);
     }
 
     public function comments(){
-        return $this->hasMany(Comment:class);
+        return $this->hasMany(Comment::class);
     }
 
     public function stories(){
-        return $this->hasMany(Story:class);
+        return $this->hasMany(Story::class);
     }
 
     public function follows(){
-        return $this->hasMany(Follow:class);
+        return $this->hasMany(Follow::class);
     }
 
     public function notifications(){
-        return $this->hasMany(Notification:class);
+        return $this->hasMany(Notification::class);
     }
 }

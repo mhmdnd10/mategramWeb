@@ -19,8 +19,8 @@ return new class extends Migration
             $table->string('username')->unique();
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password');
-            $table->string('profile_pricture');
-            $table->string('bio');
+            $table->string('profile_picture')->nullable(); 
+            $table->string('bio')->nullable();
             $table->rememberToken();
             $table->timestamps();
         });
