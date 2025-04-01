@@ -6,6 +6,8 @@ use App\Http\Controllers\AuthController;
 use Illuminate\Foundation\Auth\EmailVerificationRequest;
 use App\Http\Controllers\PostController;
 use App\Http\Controllers\CommentController;
+use App\Http\Controllers\LikeController;
+use App\Http\Controllers\NotificationController;
 
 
 /*
@@ -60,4 +62,21 @@ Route::middleware('auth:sanctum')->group(function(){
 
 Route::middleware('auth:sanctum')->group(function(){
     Route::post('/comments/{post_id}',[CommentController::class,'store']);
+    Route::get('/comments/{post_id}',[CommentController::class,'index']);
+    Route::get('/comments/{post_id}/{id}',[CommentController::class,'show']);
+    Route::delete('/comments/{post_id}/{id}',[CommentController::class,'destroy']);
+});
+
+
+Route::middleware('auth:sanctum')->group(function(){
+    Route::post('/likes/{post_id}',[LikeController::class,'store']);
+});
+Route::get('/likes/{post_id}',[LikeController::class,'index']);
+Route::get('/likes/{post_id}/count',[LikeController::class,'count']);
+
+Route::middleware('auth:sanctum')->group(function(){
+    Route::post('/notifications',[NotificationController::class,'store']);
+    Route::get('/notifications',[NotificationController::class,'index']);
+    Route::get('/notifications/{id}',[NotificationController::class,'show']);
+    Route::delete('/notifications/{id}',[NotificationController::class,'destroy']);
 });
