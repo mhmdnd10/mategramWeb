@@ -8,6 +8,8 @@ use App\Http\Controllers\PostController;
 use App\Http\Controllers\CommentController;
 use App\Http\Controllers\LikeController;
 use App\Http\Controllers\NotificationController;
+use App\Http\Controllers\StoryController;
+use App\Http\Controllers\FollowController;
 
 
 /*
@@ -80,3 +82,28 @@ Route::middleware('auth:sanctum')->group(function(){
     Route::get('/notifications/{id}',[NotificationController::class,'show']);
     Route::delete('/notifications/{id}',[NotificationController::class,'destroy']);
 });
+
+
+
+Route::middleware('auth:sanctum')->group(function () {
+    Route::post('/stories', [StoryController::class, 'store']);
+    Route::get('/stories', [StoryController::class, 'index']);
+    Route::get('/stories/user/{userId}', [StoryController::class, 'userStories']);
+    Route::delete('/stories/{id}', [StoryController::class, 'destroy']);
+
+});
+
+
+
+
+Route::middleware('auth:sanctum')->group(function () {
+    Route::post('follow', [FollowController::class, 'follow']);
+    Route::post('unfollow', [FollowController::class, 'unfollow']);
+});
+Route::get('followers/{userId}', [FollowController::class, 'followers']);
+Route::get('following/{userId}', [FollowController::class, 'following']);
+Route::get('followers/count/{user_id}', [FollowController::class, 'followerCount']);
+Route::get('following/count/{user_id}', [FollowController::class, 'followingCount']);
+
+
+
