@@ -59,6 +59,11 @@ class AuthController extends Controller
                 'message'=>'Invalid credentials',
             ],401);
         }
+        if (!$user->email_verified_at) {
+            return response()->json([
+                'message' => 'Email not verified.'
+            ], 403);
+        }
         $token = $user->createToken('authToken')->plainTextToken;
         
             return response()->json([
@@ -127,5 +132,33 @@ class AuthController extends Controller
 
         $user->update(['password' => bcrypt($request->new_password)]);
         return response()->json(['message' => 'Password changed successfully!']);
+    }
+
+    public function verifyEmail(Request $request){
+        $request->validate([
+            'code'=>'required|string|size:6',
+            'email'=>'required|email|exists:users,email',
+        ]);
+        $user=User::where('email',$request->email)->first();
+        if($user && $user->verification_code == $request->code){
+            $user->email_verified_at = now();
+            $user->verification_code=null;
+            $user->save();
+            
+            return response()->json(['message' => 'Email verified successfully']);
+        }
+        return response()->json(['message' => 'Invalid verification code'], 422);
+
+    }
+
+    public function search(Request $request){
+        $query = $request->input('query');
+        if (!$query) {
+            return response()->json([]);
+        }
+        $users = User::where('username', 'like', "%$query%")
+        ->orWhere('name', 'like', "%$query%")
+        ->get();
+        return response()->json($users);
     }
 }

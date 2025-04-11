@@ -46,11 +46,13 @@ Route::middleware(['auth:sanctum'])->group(function () {
         return response()->json(['message' => 'Email verified successfully!']);
 
     })->name('verification.verify');
+    Route::get('/search/users', [AuthController::class, 'search']);
+
 });
 
 Route::post('/forgot-password',[AuthController::class,'forgotPassword']);
 Route::post('/reset-password', [AuthController::class, 'resetPassword']);
-
+Route::post('/verify-email', [AuthController::class, 'verifyEmail']);
 
 Route::middleware('auth:sanctum')->post('/change-password',[AuthController::class,'changePassword']);
 
